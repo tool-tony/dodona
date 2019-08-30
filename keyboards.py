@@ -52,7 +52,7 @@ def DrawPolygons(polylist, facecolor = 'lightblue', figsize = None):
     plt.show()
 
 def DrawKeyboard(k, wordlist = None, logarithmic = False, pmin = None, pmax = None, inputvector = None,
-                t9 = False, letters = True, frequencymap = None, oneletter = None, colormap = mpl.cm.cool, figsize = None, saveas = None,
+                t9 = False, letterease = False, letters = True, frequencymap = None, oneletter = None, colormap = mpl.cm.cool, figsize = None, saveas = None,
                 nopalette = False, perfectvector = None, axis = 'off', facecolor = 'lightblue', vectorcolormap = mpl.cm.autumn_r, markersize = None,
                 transparent = True, perfectcolor = 'b'):
     if figsize != None:
@@ -135,6 +135,14 @@ def DrawKeyboard(k, wordlist = None, logarithmic = False, pmin = None, pmax = No
         if t9:
             if i in [0, 3, 6, 9, 12, 15, 19, 22]:
                 extras = 4 if i in [15, 22] else 3
+                for j in range(i+1, i + extras):
+                    c += ' ' + ordered_key_list[j]
+            else:
+                c = ''
+        
+        if letterease:
+            if i in [0, 3, 5, 7, 10, 12, 14, 16, 18, 20, 22, 24, 26]:
+                extras = 3 if i in [0, 7] else 2
                 for j in range(i+1, i + extras):
                     c += ' ' + ordered_key_list[j]
             else:
@@ -345,6 +353,36 @@ def MakeT9Keyboard(alphabetStr='abcdefghijklmnopqrstuvwxyz', scale=0.9):
                     l.append(p)
                 if j==2 and (i!=1):
                     l.append(p)
+            oldp = p
+        h.Translate(0, shift[1])
+
+    k = core.Keyboard()
+    for i in range(26):
+        k.AddKey(alphabetStr[i], l[i])
+
+    return k
+
+def MakeLetterEaseKeyboard(alphabetStr='elzowsktmqagrfnbicyxuphvdj', scale=0.9):
+    shift = (1, -1)
+    h = core.Polygon()
+    pad = (1.0-scale)/2.0
+    h.AddVertex(pad,-pad)
+    h.AddVertex(1-pad,-pad)
+    h.AddVertex(1-pad,pad-1)
+    h.AddVertex(pad,pad-1)
+    h.Translate(-2.5, 1.5)
+
+    l = []
+    for j in range(4):
+        oldp = h
+        for i in range(3):
+            p = deepcopy(oldp)
+            p.Translate(shift[0],0)
+            if (i==0):
+                if (j==0 or j==1):
+                    l.append(p)
+            for k in range(2):
+                l.append(p)
             oldp = p
         h.Translate(0, shift[1])
 

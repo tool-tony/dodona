@@ -14,6 +14,19 @@ def ReadBook(book, wordlist=None, cleaner=AlphaOnly):
                     wordlist.AddWord(word)
     return wordlist
 
+def ReadFrequencies(book, cleaner=AlphaOnly):
+    wordlist = core.WordList()
+    with open(book, "r", errors="replace") as f:
+        for line in f:
+            args = line.split("\t")
+            frequency = int(args[1]) // 1000
+            word = args[0]
+            word = cleaner(word)
+            if len(word) > 0:
+                wordlist.AddWord(word, frequency)
+    return wordlist
+
+
 def MostCommon(wordlist, N):
     w2 = core.WordList()
     for i in range(min(N,wordlist.Words())):

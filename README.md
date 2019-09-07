@@ -455,6 +455,20 @@ And you can also merge wordlists by adding them.
 huckfinn_wordlist = huckfinn_wordlist + short_wordlist
 ```
 
+Another way to construct a wordlist is to parse a word frequency file with the word or word phrase separated from the count of occurances on the right by a tab.
+
+```python
+from urllib.request import urlopen
+
+with open('/tmp/google-books-common-words.txt', 'w') as f:
+    data = urlopen('http://www.norvig.com/google-books-common-words.txt').read()
+    f.write(data.decode('utf-8'))
+common_words = wordlists.ReadFrequencies('/tmp/google-books-common-words.txt')
+print('Wordlist size:', common_words.Words())
+```
+
+    Wordlist size: 97565
+
 ### Accessing Wordlists
 
 One way to access words is by index. The words are automatically sorted by their

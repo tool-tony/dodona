@@ -19,7 +19,7 @@ def ReadFrequencies(book, cleaner=AlphaOnly):
     with open(book, "r", errors="replace") as f:
         for line in f:
             args = line.split("\t")
-            frequency = int(args[1]) // 1000
+            frequency = (int(args[1]) // 1000)+1
             word = args[0]
             word = cleaner(word)
             if len(word) > 0:
@@ -31,4 +31,16 @@ def MostCommon(wordlist, N):
     w2 = core.WordList()
     for i in range(min(N,wordlist.Words())):
         w2.AddWord(wordlist.Word(i), wordlist.Occurances(i))
+    return w2
+
+def SmallCommon(wordlist, N, Size=5):
+    w2 = core.WordList()
+    length = wordlist.Words()
+    X = min(N,length)
+    for i in range(X):
+        word = wordlist.Word(i)
+        if len(word)<=Size:
+            w2.AddWord(wordlist.Word(i), wordlist.Occurances(i))
+        elif (X < length):
+            X += 1
     return w2
